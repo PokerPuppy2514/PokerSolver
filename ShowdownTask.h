@@ -13,27 +13,18 @@ public:
                  std::vector<float>* result,
                  TerminalNode* node,
                  int hero, int villain,
-                 std::vector<float> villainReachProbs,
-                 uint8_t board[5])
-        : rangeManager(std::move(rangeManager)),
-          result(result),
-          node(node),
-          hero(hero),
-          villain(villain),
-          villainReachProbs(std::move(villainReachProbs))
-    {
-        for (int i = 0; i < 5; ++i) this->board[i] = board[i];
-    }
+                 std::vector<float> villainReachProbs, // moved in
+                 uint8_t board[5]);
 
-    // simple synchronous worker (replaces old task::execute)
+    // Replaces the old TBB task::execute(); runs synchronously.
     void run();
 
 private:
     std::shared_ptr<RangeManager> rangeManager;
     std::vector<float>* result;
     TerminalNode* node;
-    int hero{0};
-    int villain{0};
-    std::vector<float> villainReachProbs;
-    uint8_t board[5]{};
+    int hero;
+    int villain;
+    std::vector<float> villainReachProbs; // owned copy for this task
+    uint8_t board[5];
 };
